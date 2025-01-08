@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const { connectDB } = require('./src/config/db');
 const ProjectRoutes = require('./src/api/routes/project');
-const OnwerRoutes = require('./src/api/routes/onwers');
+const OwnerRoutes = require('./src/api/routes/owners');
 const UserRoutes = require('./src/api/routes/users');
 const PORT = 3000;
 const DB_URL = process.env.DB_URL;
@@ -11,11 +11,12 @@ const app = express();
 connectDB();
 
 // Middleware para parsear JSON y enviar datos de inmsonia en Json a la base de datos
-app.use(express.json());
+//app.use(express.json());
+app.use('/projects', ProjectRoutes);
 
 // Rutas
 app.use('/api/v1/projects', ProjectRoutes);
-app.use('/api/v1/onwer', OnwerRoutes);
+app.use('/api/v1/owner', OwnerRoutes);
 app.use('/api/v1/user', UserRoutes);
 app.use('/ping', (req, res, next) => {
   return res.status(200).json('pong');

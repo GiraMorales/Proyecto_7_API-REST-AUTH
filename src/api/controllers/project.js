@@ -1,15 +1,15 @@
-const Project6 = require('../models/project6');
+const Project = require('../models/project');
 
 //! CREATE
 const postProjects = async (req, res, next) => {
   try {
-    const newProyect = new Project6({
+    const newProyect = new Project({
       title: req.body.title,
       imgUrl: req.body.imgUrl,
       username: req.body.username
     });
-    const project6Saved = await newProyect.save();
-    return res.status(201).json(project6Saved);
+    const projectSaved = await newProyect.save();
+    return res.status(201).json(projectSaved);
   } catch (error) {
     return res.status(400).json('Error al crear el proyecto');
   }
@@ -17,7 +17,7 @@ const postProjects = async (req, res, next) => {
 //! READ
 const getProjects = async (req, res, next) => {
   try {
-    const allProjects = await Project6.find().populate('username');
+    const allProjects = await Project.find().populate('username');
     return res.status(200).json(allProjects);
   } catch (error) {
     return res.status(400).json('Error al obtener proyectos');
@@ -26,7 +26,7 @@ const getProjects = async (req, res, next) => {
 const getUserProjects = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const userProjects = await Project6.findById({ user: id }).populate(
+    const userProjects = await Project.findById({ user: id }).populate(
       username
     );
 
@@ -39,9 +39,9 @@ const getUserProjects = async (req, res, next) => {
 const updateProjects = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const newProyect = new Project6(req.body);
+    const newProyect = new Project(req.body);
     newProyect._id = id;
-    const updateProjects = await Project6.findByIdAndUpdate(id, newProyect, {
+    const updateProjects = await Project.findByIdAndUpdate(id, newProyect, {
       new: true
     });
     return res.status(200).json(updateProjects);
@@ -54,10 +54,10 @@ const updateProjects = async (req, res, next) => {
 const deleteProjects = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const projectDeleted = await Project6.findByIdAndDelete(id);
+    const projectDeleted = await Project.findByIdAndDelete(id);
     return res.status(200).json(projectDeleted);
   } catch (error) {
-    return res.status(400).json('Error al elmiminar el proyecto');
+    return res.status(400).json('Error al eliminar el proyecto');
   }
 };
 

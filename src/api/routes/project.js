@@ -4,14 +4,14 @@ const {
   postProjects,
   updateProjects,
   deleteProjects
-} = require('../controllers/project6');
+} = require('../controllers/project');
 
-const Project6Routes = require('express').Router();
+const ProjectRoutes = require('express').Router();
 
-Project6Routes.get('/', getProjects);
-Project6Routes.get('/:id', getUserProjects);
-Project6Routes.post('/', postProjects);
-Project6Routes.put('/:id', updateProjects);
-Project6Routes.delete('/:id', deleteProjects);
+ProjectRoutes.get('/', getProjects);
+ProjectRoutes.get('/:id', getUserProjects);
+ProjectRoutes.post('/', postProjects);
+ProjectRoutes.put('/:id', updateProjects);
+ProjectRoutes.delete('/:id', deleteProjects);
 
-module.exports = Project6Routes;
+module.exports = ProjectRoutes;
