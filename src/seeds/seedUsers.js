@@ -6,20 +6,14 @@ const User = require('../api/models/users');
 const users = [
   {
     username: 'admin',
-    email: 'admin@example.com',
-    role: 'admin',
     password: 'admin123'
   },
   {
     username: 'user1',
-    email: 'user1@example.com',
-    role: 'user',
     password: 'user123'
   },
   {
     username: 'user2',
-    email: 'user2@example.com',
-    role: 'user',
     password: 'user456'
   }
 ];
@@ -28,7 +22,7 @@ const users = [
 const seedUsers = async () => {
   try {
     // Conectar a la base de datos
-    await mongoose.connect(process.env.DB_URI, {
+    await mongoose.connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });

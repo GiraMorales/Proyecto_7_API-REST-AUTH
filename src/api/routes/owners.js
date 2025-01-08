@@ -3,7 +3,7 @@ const {
   getOwners,
   updateOwner,
   deleteOwner
-} = require('..controllers/owners');
+} = require('../controllers/owners');
 
 const OwnerRoutes = require('express').Router();
 

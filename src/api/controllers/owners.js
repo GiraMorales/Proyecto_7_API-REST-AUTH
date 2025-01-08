@@ -1,7 +1,7 @@
 const Owners = require('../models/owners');
 
 //! CREATE
-const postOwners = async (req, res, next) => {
+const postOwner = async (req, res, next) => {
   try {
     const newOwners = new Owners({
       ownername: req.body.ownername,
@@ -16,9 +16,9 @@ const postOwners = async (req, res, next) => {
 };
 
 //! READ
-const getOwnerss = async (req, res, next) => {
+const getOwners = async (req, res, next) => {
   try {
-    const allOwnerss = await Owners.find();
+    const allOwners = await Owners.find();
     return res.status(200).json(allOwners);
   } catch (error) {
     return res.status(400).json('Error al obtener propietarios');
@@ -26,7 +26,7 @@ const getOwnerss = async (req, res, next) => {
 };
 
 //! UPDATE
-const updateOwners = async (req, res, next) => {
+const updateOwner = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updatedOwners = await Owners.findByIdAndUpdate(id, req.body, {
@@ -39,7 +39,7 @@ const updateOwners = async (req, res, next) => {
 };
 
 //! DELETE
-const deleteOwners = async (req, res, next) => {
+const deleteOwner = async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedOwners = await Owners.findByIdAndDelete(id);
@@ -49,4 +49,4 @@ const deleteOwners = async (req, res, next) => {
   }
 };
 
-module.exports = { postOwners, getOwnerss, updateOwners, deleteOwners };
+module.exports = { postOwner, getOwners, updateOwner, deleteOwner };
