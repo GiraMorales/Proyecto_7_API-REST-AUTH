@@ -4,7 +4,7 @@ const { connectDB } = require('./src/config/db');
 const ProjectRoutes = require('./src/api/routes/project');
 const OwnerRoutes = require('./src/api/routes/owners');
 const UsersRoutes = require('./src/api/routes/users');
-const PORT = 3001;
+const PORT = 3000;
 const app = express();
 // Conectar a la base de datos
 connectDB();

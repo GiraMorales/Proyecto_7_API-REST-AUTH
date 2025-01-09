@@ -1,3 +1,4 @@
+const { generateSing } = require('../../config/jwt');
 const User = require('../models/users');
 const bcrypt = require('bcrypt');
 
@@ -34,6 +35,9 @@ const login = async (req, res, next) => {
     if (user) {
       if (bcrypt.compareSync(req.body.password, user.password)) {
         //! aqui va la logica del login
+        const token = generateSing(user._id);
+        return res.status(200).json({ user, token });
+
         return res.status(200).json('Bienvenido');
       } else {
         return res.status(404).json('Usuario o contraseña son incorrectos');
@@ -45,4 +49,15 @@ const login = async (req, res, next) => {
     return res.status(400).json(error);
   }
 };
-module.exports = { register, login };
+
+const deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const userDeleted = await User.findByIdAndDelete(id);
+    return res.status(200).json({ mensaj: 'Usuario eliminado', userDeleted });
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+};
+
+module.exports = { register, login, deleteUser };
