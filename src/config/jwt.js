@@ -5,5 +5,8 @@ const generateSing = (id) => {
 };
 
 // comprobar si esa llave fue creada por nosotros
+const verifyjwt = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET);
+};
 
-module.exports = { generateSing };
+module.exports = { generateSing, verifyjwt };
