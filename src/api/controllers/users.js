@@ -64,14 +64,35 @@ const register = async (req, res, next) => {
 const updateUsers = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const newUser = new User(req.body);
-    newUser._id = id;
-    const updateUsers = await User.findByIdAndUpdate(id, newUser, {
+    const loggedInUser = req.user;
+
+    if (loggedInUser.id.toString() !== id && loggedInUser.rol !== 'admin') {
+      return res
+        .status(403)
+        .json({ message: 'No tienes permisos para modificar este usuario' });
+    }
+
+    const newUserData = req.body;
+
+    if (
+      loggedInUser.rol === 'admin' &&
+      newUserData.rol &&
+      newUserData.rol === 'admin'
+    ) {
+      if (loggedInUser.id.toString() === id) {
+        return res
+          .status(403)
+          .json({ message: 'No puedes cambiar tu propio rol a admin' });
+      }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, newUserData, {
       new: true
     });
-    return res.status(200).json(updateUsers);
+
+    return res.status(200).json(updatedUser);
   } catch (error) {
-    return res.status(400).json('Error al actualizar el proyecto');
+    return res.status(400).json('Error al actualizar el usuario');
   }
 };
 
@@ -79,11 +100,25 @@ const updateUsers = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const userDeleted = await User.findByIdAndDelete(id);
-    return res.status(200).json({ mensaj: 'Usuario eliminado', userDeleted });
+    const loggedInUser = req.user;
+    if (loggedInUser.id.toString() === id) {
+      const userDeleted = await User.findByIdAndDelete(id);
+      return res
+        .status(200)
+        .json({ message: 'Tu usuario ha sido eliminado', userDeleted });
+    }
+    if (loggedInUser.rol === 'admin') {
+      const userDeleted = await User.findByIdAndDelete(id);
+      return res.status(200).json({
+        message: 'Usuario eliminado por el administrador',
+        userDeleted
+      });
+    }
+    return res
+      .status(403)
+      .json({ message: 'No tienes permisos para eliminar este usuario' });
   } catch (error) {
     return res.status(400).json(error);
   }
 };
-
 module.exports = { register, login, deleteUser, getUsers, updateUsers };
