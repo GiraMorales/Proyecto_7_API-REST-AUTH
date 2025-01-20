@@ -4,11 +4,12 @@ const { connectDB } = require('./src/config/db');
 const ProjectRoutes = require('./src/api/routes/project');
 const OwnerRoutes = require('./src/api/routes/owners');
 const UsersRoutes = require('./src/api/routes/users');
+const cors = require('cors');
 const PORT = 3000;
 const app = express();
 // Conectar a la base de datos
 connectDB();
-
+app.use(cors());
 // Middleware para parsear JSON y enviar datos de inmsonia en Json a la base de datos
 app.use(express.json());
 
