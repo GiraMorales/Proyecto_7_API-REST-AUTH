@@ -9,8 +9,10 @@ Para realizar las operaciones CRUD uso la APP INMSOMIA, y todo se gestiona en la
 
 ### Users
 
-POST /api/v1/users/register: Registro de un nuevo usuario.
-POST /api/v1/users/login: Inicio de sesión de un usuario.
+GET /api/v1/users: Obtiene todos los usuarios.
+POST /api/v1/users: Crea un nuevo usuario.
+PUT /api/v1/users/:id: Actualiza un usuario existente.
+DELETE /api/v1/users/:id: Elimina un usuario.
 
 ### Projects
 
@@ -37,14 +39,54 @@ DELETE /api/v1/owners/:id: Elimina un propietario y su archivo asociado en Cloud
 
 ## Instalación
 
+### Se clona este repositorio
+
 https://github.com/GiraMorales/Proyecto_7_API-REST-AUTH.git
+
+### Incializar un paquete de npm
+
+- nmp init -y
 
 ### Se instala las dependencias
 
+`Para encryptar las contraseñas de los usuarios.`
+
 - "bcrypt"
+
+`Para poder interactuar con la base de datos cloudinary y guardar allí las imagenes.`
+
+- "cloudinary"
+
+`Para permitir que mi servidor acepte solicitudes de origines diferentes.`
+
 - "cors"
+
+`Para manejar variables del archivo .env donde estan los datos sensibles que no pueden ver nadie.`
+
 - "dotenv"
+
+`Para simplificar la creación de rutas, middlewares y servidores.`
+
 - "express"
+
+`Para verificar y crear tokens de autenticación y autorización.`
+
 - "jsonwebtoken"
+
+`Para interactuar con la base de datos mongo.`
+
 - "mongodb"
+
+`Para crear modelos de dots y gestionarlos`
+
 - "mongoose"
+
+### añadir los scripts
+
+`Para ejecutar el fichero  index.js`
+
+- "start": "node index.js"
+
+`Para levantar la base de datos`
+
+- "dev": "nodemon index.js"
