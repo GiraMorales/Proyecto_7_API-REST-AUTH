@@ -2,6 +2,7 @@ const { generateSing } = require('../../config/jwt');
 const User = require('../models/users');
 const bcrypt = require('bcrypt');
 
+//! READ
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.find();
@@ -10,6 +11,28 @@ const getUsers = async (req, res, next) => {
     return res.status(400).json(error);
   }
 };
+
+const login = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ userName: req.body.userName });
+
+    if (user) {
+      if (bcrypt.compareSync(req.body.password, user.password)) {
+        //! aqui va la logica del login
+        const token = generateSing(user._id);
+        return res.status(200).json({ user, token, message: 'Bienvenido' });
+      } else {
+        return res.status(404).json('Usuario o contraseña son incorrectos');
+      }
+    } else {
+      return res.status(404).json('Usuario o contraseña son incorrectos');
+    }
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+};
+
+//! CREATE
 const register = async (req, res, next) => {
   try {
     const newUser = new User({
@@ -37,26 +60,22 @@ const register = async (req, res, next) => {
   }
 };
 
-const login = async (req, res, next) => {
+//! UPDATE
+const updateUsers = async (req, res, next) => {
   try {
-    const user = await User.findOne({ userName: req.body.userName });
-
-    if (user) {
-      if (bcrypt.compareSync(req.body.password, user.password)) {
-        //! aqui va la logica del login
-        const token = generateSing(user._id);
-        return res.status(200).json({ user, token, message: 'Bienvenido' });
-      } else {
-        return res.status(404).json('Usuario o contraseña son incorrectos');
-      }
-    } else {
-      return res.status(404).json('Usuario o contraseña son incorrectos');
-    }
+    const { id } = req.params;
+    const newUser = new User(req.body);
+    newUser._id = id;
+    const updateUsers = await User.findByIdAndUpdate(id, newUser, {
+      new: true
+    });
+    return res.status(200).json(updateUsers);
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(400).json('Error al actualizar el proyecto');
   }
 };
 
+//! DELETE
 const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -67,4 +86,4 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, deleteUser, getUsers };
+module.exports = { register, login, deleteUser, getUsers, updateUsers };
