@@ -3,7 +3,8 @@ const {
   register,
   deleteUser,
   login,
-  getUsers
+  getUsers,
+  updateUsers
 } = require('../controllers/users');
 
 const UsersRoutes = require('express').Router();
