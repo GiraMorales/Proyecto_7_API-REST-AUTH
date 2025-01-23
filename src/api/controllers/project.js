@@ -17,7 +17,10 @@ const postProjects = async (req, res, next) => {
 //! READ
 const getProjects = async (req, res, next) => {
   try {
-    const allProjects = await Project.find().populate('username');
+    const allProjects = await Project.find().populate(
+      'username',
+      'username email'
+    );
     return res.status(200).json(allProjects);
   } catch (error) {
     return res.status(400).json('Error al obtener proyectos');
@@ -27,7 +30,8 @@ const getUserProjects = async (req, res, next) => {
   try {
     const { id } = req.params;
     const userProjects = await Project.findById({ user: id }).populate(
-      username
+      'username',
+      'username email'
     );
 
     return res.status(200).json(userProjects);
