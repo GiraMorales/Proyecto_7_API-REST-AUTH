@@ -1,4 +1,4 @@
-const { isAdmin } = require('../../middlewares/auth');
+const { isAdmin, isAuth } = require('../../middlewares/auth');
 const {
   register,
   deleteUser,
@@ -13,6 +13,6 @@ UsersRoutes.get('/', [isAdmin], getUsers);
 UsersRoutes.post('/register', register);
 UsersRoutes.post('/login', login);
 UsersRoutes.post('/rol', [isAdmin], updateUsers);
-UsersRoutes.delete('/:id', deleteUser);
+UsersRoutes.delete('/:id', [isAuth], deleteUser);
 
 module.exports = UsersRoutes;
