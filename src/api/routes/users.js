@@ -11,6 +11,7 @@ const UsersRoutes = require('express').Router();
 UsersRoutes.get('/', [isAdmin], getUsers);
 UsersRoutes.post('/register', register);
 UsersRoutes.post('/login', login);
-UsersRoutes.delete('/:id', [isAdmin], deleteUser);
+UsersRoutes.post('/rol', [isAdmin], updateUsers);
+UsersRoutes.delete('/:id', deleteUser);
 
 module.exports = UsersRoutes;
