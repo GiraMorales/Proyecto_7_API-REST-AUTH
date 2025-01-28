@@ -4,7 +4,7 @@ const OwnerSchema = new mongoose.Schema(
   {
     ownername: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    rol: { type: String, enum: ['user', 'admin'], default: 'user' },
     verified: { type: Boolean, required: true, default: false }
   },
   {

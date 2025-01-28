@@ -7,7 +7,11 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'project' }],
-    role: { type: mongoose.Schema.Types.ObjectId, ref: 'owners' }
+    rol: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'owners',
+      default: 'user'
+    }
   },
   {
     timestamps: true,

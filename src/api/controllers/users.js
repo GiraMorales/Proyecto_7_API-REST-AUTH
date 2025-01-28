@@ -14,7 +14,7 @@ const getUsers = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const user = await User.findOne({ userName: req.body.userName });
+    const user = await User.findOne({ username: req.body.username });
 
     if (user) {
       if (bcrypt.compareSync(req.body.password, user.password)) {
@@ -36,12 +36,13 @@ const login = async (req, res, next) => {
 const register = async (req, res, next) => {
   try {
     const newUser = new User({
-      userName: req.body.userName,
+      username: req.body.username,
       password: req.body.password,
+      email: req.body.email,
       rol: 'user'
     });
 
-    const userDuplicate = await User.findOne({ userName: req.body.userName });
+    const userDuplicate = await User.findOne({ username: req.body.username });
     if (userDuplicate) {
       return res
         .status(400)
@@ -49,7 +50,7 @@ const register = async (req, res, next) => {
     }
 
     const userSaved = await newUser.save();
-    return res.status(201).json(user);
+    return res.status(201).json(userSaved);
   } catch (error) {
     // if (error.code === 11000) {
     // return res
@@ -101,24 +102,38 @@ const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const loggedInUser = req.user;
-    if (loggedInUser.id.toString() === id) {
-      const userDeleted = await User.findByIdAndDelete(id);
+    if (!loggedInUser) {
       return res
-        .status(200)
-        .json({ message: 'Tu usuario ha sido eliminado', userDeleted });
+        .status(401)
+        .json({ message: 'No tienes permisos para realizar esta acción' });
     }
-    if (loggedInUser.rol === 'admin') {
-      const userDeleted = await User.findByIdAndDelete(id);
+    const userToDelete = await User.findById(id);
+    if (!userToDelete) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    if (loggedInUser.id.toString() === id) {
+      await User.findByIdAndDelete(id);
       return res.status(200).json({
-        message: 'Usuario eliminado por el administrador',
-        userDeleted
+        message: 'Tu usuario ha sido eliminado correctamente'
+      });
+    }
+
+    if (loggedInUser.rol === 'admin') {
+      await User.findByIdAndDelete(id);
+      return res.status(200).json({
+        message: 'Usuario eliminado por el administrador'
       });
     }
     return res
       .status(403)
       .json({ message: 'No tienes permisos para eliminar este usuario' });
   } catch (error) {
-    return res.status(400).json(error);
+    // Captura cualquier error
+    return res.status(500).json({
+      message: 'Error al eliminar el usuario',
+      error: error.message
+    });
   }
 };
 module.exports = { register, login, deleteUser, getUsers, updateUsers };
