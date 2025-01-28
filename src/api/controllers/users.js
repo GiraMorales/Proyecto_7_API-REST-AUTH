@@ -39,7 +39,7 @@ const register = async (req, res, next) => {
       username: req.body.username,
       password: req.body.password,
       email: req.body.email,
-      rol: 'user'
+      rol: req.body.rol
     });
 
     const userDuplicate = await User.findOne({ username: req.body.username });
