@@ -14,16 +14,15 @@ const getUsers = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email, password });
 
     if (user) {
-      if (bcrypt.compareSync(req.body.password, user.password)) {
-        //! aqui va la logica del login
-        const token = generateSing(user._id);
-        return res.status(200).json({ user, token, message: 'Bienvenido' });
-      } else {
-        return res.status(404).json('Usuario o contraseña son incorrectos');
-      }
+      return res.status(404).json('Usuario o contraseña son incorrectos');
+    }
+    if (bcrypt.compareSync(req.body.password, user.password)) {
+      const token = generateSing(user._id);
+      return res.status(200).json({ user, token, message: 'Bienvenido' });
     } else {
       return res.status(404).json('Usuario o contraseña son incorrectos');
     }
