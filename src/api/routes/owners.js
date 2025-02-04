@@ -1,4 +1,4 @@
-const { isAdmin } = require('../../middlewares/auth');
+const { isAdmin } = require('../../middlewares/isAuth');
 const {
   postOwner,
   getOwners,

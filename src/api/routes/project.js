@@ -1,4 +1,4 @@
-const { isAuth, isAdmin } = require('../../middlewares/auth');
+const { isAuth, isAdmin } = require('../../middlewares/isAuth');
 const {
   getProjects,
   getUserProjects,

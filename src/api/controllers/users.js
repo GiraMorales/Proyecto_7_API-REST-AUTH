@@ -2,13 +2,33 @@ const { generateSing } = require('../../config/jwt');
 const User = require('../models/users');
 const bcrypt = require('bcrypt');
 
+//! CREATE
+const register = async (req, res, next) => {
+  try {
+    const newUser = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      rol: req.body.rol
+    });
+    const userDuplicate = await User.findOne({ email: req.body.email });
+    if (userDuplicate) {
+      return res.status(400).json('Este mail ya existe');
+    }
+    const userSaved = await newUser.save();
+    return res.status(201).json(userSaved);
+  } catch (error) {
+    return res.status(400).json('Error al crear usuario');
+  }
+};
+
 //! READ
 const getUsers = async (req, res, next) => {
   try {
-    const users = await User.find();
-    return res.status(200).json(users);
+    const allusers = await User.find();
+    return res.status(200).json(allusers);
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(400).json('Error al obtener usuarios');
   }
 };
 
@@ -27,35 +47,6 @@ const login = async (req, res, next) => {
       return res.status(404).json('Usuario o contraseña son incorrectos');
     }
   } catch (error) {
-    return res.status(400).json(error);
-  }
-};
-
-//! CREATE
-const register = async (req, res, next) => {
-  try {
-    const newUser = new User({
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email,
-      rol: req.body.rol
-    });
-
-    const userDuplicate = await User.findOne({ username: req.body.username });
-    if (userDuplicate) {
-      return res
-        .status(400)
-        .json({ message: 'Ese nombre de usuario ya existe' });
-    }
-
-    const userSaved = await newUser.save();
-    return res.status(201).json(userSaved);
-  } catch (error) {
-    // if (error.code === 11000) {
-    // return res
-    // .status(400)
-    //.json({ message: 'Ese nombre de usuario ya existe' });
-    // }
     return res.status(400).json(error);
   }
 };
