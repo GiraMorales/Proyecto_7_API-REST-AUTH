@@ -22,6 +22,25 @@ const register = async (req, res, next) => {
   }
 };
 
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json('Usuario o contraseña son incorrectos');
+    }
+    if (bcrypt.compareSync(password, user.password)) {
+      const token = generateSing(user._id);
+      return res.status(200).json({ token, user, message: 'Bienvenido' });
+    } else {
+      return res.status(404).json('Usuario o contraseña son incorrectos');
+    }
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+};
+
 //! READ
 const getUsers = async (req, res, next) => {
   try {
@@ -29,25 +48,6 @@ const getUsers = async (req, res, next) => {
     return res.status(200).json(allusers);
   } catch (error) {
     return res.status(400).json('Error al obtener usuarios');
-  }
-};
-
-const login = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email, password });
-
-    if (user) {
-      return res.status(404).json('Usuario o contraseña son incorrectos');
-    }
-    if (bcrypt.compareSync(req.body.password, user.password)) {
-      const token = generateSing(user._id);
-      return res.status(200).json({ user, token, message: 'Bienvenido' });
-    } else {
-      return res.status(404).json('Usuario o contraseña son incorrectos');
-    }
-  } catch (error) {
-    return res.status(400).json(error);
   }
 };
 

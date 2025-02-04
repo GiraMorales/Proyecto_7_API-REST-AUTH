@@ -9,7 +9,7 @@ const {
 
 const UsersRoutes = require('express').Router();
 
-UsersRoutes.get('/', getUsers);
+UsersRoutes.get('/', isAuth, getUsers);
 UsersRoutes.post('/register', register);
 UsersRoutes.post('/login', login);
 UsersRoutes.put('/:id', updateUsers);
