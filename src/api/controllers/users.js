@@ -86,6 +86,10 @@ const updateUsers = async (req, res, next) => {
           .json({ message: 'No puedes cambiar tu propio rol a admin' });
       }
     }
+    const userDuplicate = await User.findOne({ email: req.body.email });
+    if (userDuplicate) {
+      return res.status(400).json('Ese mail ya está en uso');
+    }
 
     const updatedUser = await User.findByIdAndUpdate(id, newUserData, {
       new: true

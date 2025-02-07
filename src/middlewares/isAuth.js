@@ -29,7 +29,7 @@ const isAdmin = async (req, res, next) => {
 
     const parsedToken = token.replace('Bearer ', '');
     const { id } = verifyjwt(parsedToken);
-    const user = await User.findByPk(id);
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
