@@ -1,4 +1,4 @@
-const { isAdmin } = require('../../middlewares/isAuth');
+const { isAuth } = require('../../middlewares/isAuth');
 const {
   postOwner,
   getOwners,
@@ -8,9 +8,9 @@ const {
 
 const OwnerRoutes = require('express').Router();
 
-OwnerRoutes.post('/', postOwner); // Crear propietario
+OwnerRoutes.post('/', [isAuth], postOwner); // Crear propietario
 OwnerRoutes.get('/', getOwners); // Obtener todos los pripietarios
-OwnerRoutes.put('/:id', updateOwner); // Actualizar propietario por ID
-OwnerRoutes.delete('/:id', deleteOwner); // Eliminar propietario por ID
+OwnerRoutes.put('/:id', [isAuth], updateOwner); // Actualizar propietario por ID
+OwnerRoutes.delete('/:id', [isAuth], deleteOwner); // Eliminar propietario por ID
 
 module.exports = OwnerRoutes; // Exportar rutas de usuarios

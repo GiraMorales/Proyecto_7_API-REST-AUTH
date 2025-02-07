@@ -1,3 +1,4 @@
+const { isAuth } = require('../../middlewares/isAuth');
 const {
   getProjects,
   getUserProjects,
@@ -10,8 +11,8 @@ const ProjectRoutes = require('express').Router();
 
 ProjectRoutes.get('/', getProjects);
 ProjectRoutes.get('/:id', getUserProjects);
-ProjectRoutes.post('/', postProjects);
-ProjectRoutes.put('/:id', updateProjects);
-ProjectRoutes.delete('/:id', deleteProjects);
+ProjectRoutes.post('/', [isAuth], postProjects);
+ProjectRoutes.put('/:id', [isAuth], updateProjects);
+ProjectRoutes.delete('/:id', [isAuth], deleteProjects);
 
 module.exports = ProjectRoutes;
