@@ -8,9 +8,9 @@ const {
 
 const OwnerRoutes = require('express').Router();
 
-OwnerRoutes.post('/:id', [isAdmin], postOwner); // Crear propietario
+OwnerRoutes.post('/', postOwner); // Crear propietario
 OwnerRoutes.get('/', getOwners); // Obtener todos los pripietarios
-OwnerRoutes.put('/:id', [isAdmin], updateOwner); // Actualizar propietario por ID
-OwnerRoutes.delete('/:id', [isAdmin], deleteOwner); // Eliminar propietario por ID
+OwnerRoutes.put('/:id', updateOwner); // Actualizar propietario por ID
+OwnerRoutes.delete('/:id', deleteOwner); // Eliminar propietario por ID
 
 module.exports = OwnerRoutes; // Exportar rutas de usuarios

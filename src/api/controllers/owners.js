@@ -12,6 +12,8 @@ const postOwner = async (req, res, next) => {
     const ownerSaved = await newOwners.save();
     return res.status(201).json(ownerSaved);
   } catch (error) {
+    console.log(error);
+
     return res.status(400).json('Error al crear propietario');
   }
 };

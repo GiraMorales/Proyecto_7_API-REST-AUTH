@@ -4,10 +4,7 @@ const OwnerSchema = new mongoose.Schema(
   {
     ownername: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    rol: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: 'user'
-    },
+    users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
     verified: { type: Boolean, required: true, default: false }
   },
   {
