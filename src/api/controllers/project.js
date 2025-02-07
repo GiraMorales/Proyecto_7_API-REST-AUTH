@@ -46,7 +46,7 @@ const updateProjects = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { title, imgUrl, relatedUsers } = req.body;
-    const updatedProject = await Project6.findByIdAndUpdate(
+    const updatedProject = await Project.findByIdAndUpdate(
       id,
       {
         title,
@@ -65,11 +65,6 @@ const updateProjects = async (req, res, next) => {
   } catch (error) {
     return res.status(400).json('Error al actualizar el proyecto');
   }
-  //   const newProyect = new Project(req.body);
-  //   newProyect._id = id;
-  //   const updateProjects = await Project.findByIdAndUpdate(id, newProyect, {
-  //     new: true
-  //   });
 };
 
 //! DELETE

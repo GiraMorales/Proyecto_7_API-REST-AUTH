@@ -6,8 +6,7 @@ const postOwner = async (req, res, next) => {
   try {
     const newOwners = new Owners({
       ownername: req.body.ownername,
-      email: req.body.email,
-      rol: 'user'
+      email: req.body.email
     });
     const ownerSaved = await newOwners.save();
     return res.status(201).json(ownerSaved);
