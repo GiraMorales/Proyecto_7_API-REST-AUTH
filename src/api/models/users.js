@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const UserSchema = new mongoose.Schema(
   {
     username: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true },
     password: { type: String, required: true },
     projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'project' }],
     rol: { type: String, enum: ['user', 'admin'], default: 'user' }
@@ -17,12 +17,6 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.pre('save', async function (next) {
   try {
-    const existemail = await mongoose.models.users.findOne({
-      email: this.email
-    });
-    if (existemail) {
-      throw new Error('El correo electrónico ya está en uso');
-    }
     this.password = bcrypt.hashSync(this.password, 10);
     next();
   } catch (error) {

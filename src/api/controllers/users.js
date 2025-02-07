@@ -13,7 +13,7 @@ const register = async (req, res, next) => {
     });
     const userDuplicate = await User.findOne({ email: req.body.email });
     if (userDuplicate) {
-      return res.status(400).json('Este mail ya existe');
+      return res.status(400).json('Este usuario ya existe');
     }
     const userSaved = await newUser.save();
     return res.status(201).json(userSaved);
@@ -32,7 +32,7 @@ const login = async (req, res, next) => {
     }
     if (bcrypt.compareSync(password, user.password)) {
       const token = generateSing(user._id);
-      return res.status(200).json({ token, user, message: 'Bienvenido' });
+      return res.status(200).json({ mensaje: 'Bienvenido', user, token });
     } else {
       return res.status(404).json('Usuario o contraseña son incorrectos');
     }
@@ -44,7 +44,17 @@ const login = async (req, res, next) => {
 //! READ
 const getUsers = async (req, res, next) => {
   try {
+    // const { id } = req.params;
+    const loggedInUser = req.user;
+
+    if (!loggedInUser)
+      return res
+        .status(403)
+        .json('Debes estar autenticado para realizar esta acción');
+
     const allusers = await User.find();
+
+    // const allusers = await User.find({ rol: { $in: ['user', 'admin'] } });
     return res.status(200).json(allusers);
   } catch (error) {
     return res.status(400).json('Error al obtener usuarios');
@@ -66,7 +76,7 @@ const updateUsers = async (req, res, next) => {
     const newUserData = req.body;
 
     if (
-      loggedInUser.rol === 'admin' &&
+      loggedInUser.rol === 'user' &&
       newUserData.rol &&
       newUserData.rol === 'admin'
     ) {
@@ -105,7 +115,8 @@ const deleteUser = async (req, res, next) => {
     if (loggedInUser.id.toString() === id) {
       await User.findByIdAndDelete(id);
       return res.status(200).json({
-        message: 'Tu usuario ha sido eliminado correctamente'
+        message: 'Tu usuario ha sido eliminado correctamente',
+        userToDelete
       });
     }
 

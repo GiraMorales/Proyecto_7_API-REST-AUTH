@@ -3,8 +3,12 @@ const { verifyjwt } = require('../config/jwt');
 
 const isAuth = async (req, res, next) => {
   try {
-    const [, token] = req.headers.authorization.split(' ');
-    const { id } = verifyjwt(token);
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json('No estás autorizado');
+    }
+    const parsedToken = token.replace('Bearer ', '');
+    const { id } = verifyjwt(parsedToken);
     const user = await User.findById(id);
     user.password = null;
     req.user = user;
@@ -17,16 +21,17 @@ const isAuth = async (req, res, next) => {
 const isAdmin = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-
     if (!token) {
-      return res.status(401).json({ message: 'No estás autorizado' });
+      return res.status(401).json({
+        message: 'Acción no permitida. Se requiere autenticación.'
+      });
     }
 
     const parsedToken = token.replace('Bearer ', '');
     const { id } = verifyjwt(parsedToken);
     const user = await User.findByPk(id);
     if (!user) {
-      return res.status(404).json({ message: 'Jugador no encontrado' });
+      return res.status(404).json({ message: 'Usuario no encontrado' });
     }
     if (user.rol !== 'admin') {
       return res.status(403).json({
