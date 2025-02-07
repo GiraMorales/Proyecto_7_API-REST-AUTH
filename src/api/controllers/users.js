@@ -42,22 +42,31 @@ const login = async (req, res, next) => {
 };
 
 //! READ
+// const getUsers = async (req, res, next) => {
+//   try {
+//     // const { id } = req.params;
+//     const loggedInUser = req.user;
+
+//     if (!loggedInUser)
+//       return res
+//         .status(403)
+//         .json('Debes estar autenticado para realizar esta acción');
+
+//     const allusers = await User.find();
+
+//     // const allusers = await User.find({ rol: { $in: ['user', 'admin'] } });
+//     return res.status(200).json(allusers);
+//   } catch (error) {
+//     return res.status(400).json('Error al obtener usuarios');
+//   }
+// };
+
 const getUsers = async (req, res, next) => {
   try {
-    // const { id } = req.params;
-    const loggedInUser = req.user;
-
-    if (!loggedInUser)
-      return res
-        .status(403)
-        .json('Debes estar autenticado para realizar esta acción');
-
-    const allusers = await User.find();
-
-    // const allusers = await User.find({ rol: { $in: ['user', 'admin'] } });
-    return res.status(200).json(allusers);
+    const users = await User.find();
+    return res.status(200).json(users);
   } catch (error) {
-    return res.status(400).json('Error al obtener usuarios');
+    return res.status(400).json(error);
   }
 };
 
